@@ -11,32 +11,37 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.letsTalk.springbootstarter.users.UserDetails;
 
+//Controller class to interact with the Resource URIs
 @RestController
 public class MessageController {
 
 	@Autowired
 	private MessageService messageService;
 
-	@RequestMapping("/letsTalk/users/{uniqueUserName}/sentMessages")
-	public List<MessageDetails> getAllSentMessages(@PathVariable String uniqueUserName) {
-		return messageService.getSentMessages(uniqueUserName);
+	//Controller method to gather all the sent messages of a particular user
+	@RequestMapping(method = RequestMethod.GET, value = "/letsTalk/users/{username}/sentMessages")
+	public List<MessageDetails> getAllSentMessages(@PathVariable String username) {
+		return messageService.getSentMessages(username);
 	}
 
-	@RequestMapping("/letsTalk/users/{uniqueUserName}/receivedMessages")
-	public List<MessageDetails> getAllReceivedMessages(@PathVariable String uniqueUserName) {
-		return messageService.getReceivedMessages(uniqueUserName);
+	//Controller method to gather all the received messages of a particular user
+	@RequestMapping(method = RequestMethod.GET, value ="/letsTalk/users/{username}/receivedMessages")
+	public List<MessageDetails> getAllReceivedMessages(@PathVariable String username) {
+		return messageService.getReceivedMessages(username);
 	}
-
+	
+	//Controller method to send a message from one user to another
 	@RequestMapping(method = RequestMethod.POST, value = "/letsTalk/users/{sender}/sendMessage/{receiver}")
 	public void addUser(@RequestBody MessageDetails message, @PathVariable String sender,
-			@PathVariable String receiver) {
+			@PathVariable String receiver) throws Exception {
 		message.setSender(new UserDetails(sender, "", "", 0, "", "", ""));
 		message.setReceiver(new UserDetails(receiver, "", "", 0, "", "", ""));
 		messageService.addSingleMessage(message);
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "/letsTalk/users/{uniqueUserName}/messages/{messageId}")
-	public void updateUser(@PathVariable String uniqueUserName, @PathVariable int messageId) {
+	//Admin controller method to delete a message by its messageID
+	@RequestMapping(method = RequestMethod.DELETE, value = "/letsTalk/users/{username}/messages/{messageId}")
+	public void updateUser(@PathVariable String username, @PathVariable int messageId) {
 		messageService.deleteMessage(messageId);
 	}
 

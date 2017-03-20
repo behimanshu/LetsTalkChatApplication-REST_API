@@ -5,8 +5,12 @@ import java.util.List;
 
 import org.apache.catalina.TomcatPrincipal;
 import org.apache.catalina.User;
+import org.springframework.aop.ThrowsAdvice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import io.letsTalk.springbootstarter.users.UserDetails;
+import io.letsTalk.springbootstarter.users.UserRepository;
 
 @Service
 public class MessageService {
@@ -14,37 +18,42 @@ public class MessageService {
 	@Autowired
 	private MessageRepository messageRepository;
 
-	public List<MessageDetails> getMessages() {
+	@Autowired
+	private UserRepository userRepository;
 
+	// method to retrieve all the messages from the database and adding into a
+	// list
+	public List<MessageDetails> getMessages() {
 		List<MessageDetails> messagesList = new ArrayList<>();
 		messageRepository.findAll().forEach(messagesList::add);
 		return messagesList;
-
 	}
 
-
-	public void addSingleMessage(MessageDetails message) {
-		messageRepository.save(message);
+	// method to add a single message onto the database
+	public void addSingleMessage(MessageDetails message) throws Exception {
+		UserDetails user = userRepository.findOne(message.getReceiver().getUsername());
+		if (user == null)
+			throw new Exception();
+		else
+			messageRepository.save(message);
 	}
 
+	// method to delete one message from the database
 	public void deleteMessage(int messageId) {
-
 		messageRepository.delete(messageId);
-
 	}
 
-
-	public List<MessageDetails> getReceivedMessages(String uniqueUserName) {
+	// method to retrieve all received messages of a particular userName
+	public List<MessageDetails> getReceivedMessages(String username) {
 		List<MessageDetails> receivedMessagesList = new ArrayList<>();
-		messageRepository.findByReceiverUniqueUserName(uniqueUserName)
-		.forEach(receivedMessagesList::add);
+		messageRepository.findByReceiverUsername(username).forEach(receivedMessagesList::add);
 		return receivedMessagesList;
 	}
 
-	public List<MessageDetails> getSentMessages(String uniqueUserName) {
+	// method to retrieve all sent messages of a particular userName
+	public List<MessageDetails> getSentMessages(String username) {
 		List<MessageDetails> sentMessagesList = new ArrayList<>();
-		messageRepository.findBySenderUniqueUserName(uniqueUserName)
-		.forEach(sentMessagesList::add);
+		messageRepository.findBySenderUsername(username).forEach(sentMessagesList::add);
 		return sentMessagesList;
 	}
 

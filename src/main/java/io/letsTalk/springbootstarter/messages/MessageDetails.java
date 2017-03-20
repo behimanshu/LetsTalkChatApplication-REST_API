@@ -1,24 +1,22 @@
 package io.letsTalk.springbootstarter.messages;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import io.letsTalk.springbootstarter.users.UserDetails;
 
+//Object class that stores the information of the message
 @Entity
 public class MessageDetails {
 
+	//Autoincremented ID
 	@Id
 	@GeneratedValue
 	private int messageId;
@@ -26,13 +24,15 @@ public class MessageDetails {
 	@Lob
 	private String messageContent;
 	
-	
+	//Member variable, mapped with the userName of UserDetails class
 	@ManyToOne
-	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "uniqueUserName")
+	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "username")
 	@JsonIdentityReference(alwaysAsId = true)
 	private UserDetails sender;
+	
+	//Member variable, mapped with the userName of UserDetails class
 	@ManyToOne
-	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "uniqueUserName")
+	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "username")
 	@JsonIdentityReference(alwaysAsId = true)
 	private UserDetails receiver;
 
@@ -40,6 +40,9 @@ public class MessageDetails {
 		super();
 		this.messageId = messageId;
 		this.messageContent = messageContent;
+//		this.sender = new UserDetails("",sender,"","",0,"","","");
+//		this.receiver = new UserDetails(0,receiver,"","",0,"","","");
+		
 		this.sender = new UserDetails(sender,"","",0,"","","");
 		this.receiver = new UserDetails(receiver,"","",0,"","","");
 	}

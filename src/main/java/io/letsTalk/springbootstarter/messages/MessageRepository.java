@@ -6,9 +6,14 @@ import org.springframework.data.repository.CrudRepository;
 
 import io.letsTalk.springbootstarter.users.UserDetails;
 
-public interface MessageRepository extends CrudRepository<MessageDetails, Integer>{
 
-	public List<MessageDetails> findBySenderUniqueUserName(String uniqueUserName);
-	public List<MessageDetails> findByReceiverUniqueUserName(String uniqueUserName);
+//Repository class to interact with database and fetch the results
+public interface MessageRepository extends CrudRepository<MessageDetails, Integer>{
+	
+	//Method to pull the records by mapping the sender column of MessageDetails and userName column of UserDetails
+	public List<MessageDetails> findBySenderUsername(String username);
+	
+	//Method to pull the records by mapping the receiver column of MessageDetails and userName column of UserDetails
+	public List<MessageDetails> findByReceiverUsername(String username);
 	
 }

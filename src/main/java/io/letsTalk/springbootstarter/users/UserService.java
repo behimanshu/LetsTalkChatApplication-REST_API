@@ -6,8 +6,6 @@ import java.util.List;
 import org.apache.catalina.TomcatPrincipal;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,7 +13,11 @@ public class UserService{
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private RoleRepository roleRepository;
 
+	//Method to retrieve all the users from the database
 	public List<UserDetails> getUsers() {
 
 		List<UserDetails> usersList = new ArrayList<>();
@@ -23,21 +25,29 @@ public class UserService{
 		return usersList;
 	}
 
-	public UserDetails getSingleUser(String uniqueUserName) {
-		UserDetails user = userRepository.findOne(uniqueUserName);
-		return userRepository.findOne(uniqueUserName);
+	//Method to retrieve the details of a single userName on the basis of its username
+	public UserDetails getSingleUser(String username) {
+		UserDetails user = userRepository.findOne(username);
+		return userRepository.findOne(username);
 	}
 
+	//Method to add a new user onto the database
 	public void addSingleUser(UserDetails user) {
 		userRepository.save(user);
+		Role role = new Role();
+		role.setUsername(user.getUsername());
+		role.setRole("ROLE_USER");
+		roleRepository.save(role);
 	}
 
-	public void updateSingleUser(String uniqueUserName, UserDetails user) {
+	//Method to update the details of the user, on the basis of its userName
+	public void updateSingleUser(String username, UserDetails user) {
 		userRepository.save(user);
 	}
 
-	public void deleteUser(String uniqueUserName) {
-		userRepository.delete(uniqueUserName);
+	//Method to delete a user from the database
+	public void deleteUser(String username) {
+		userRepository.delete(username);
 	}
 
 }

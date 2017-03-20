@@ -15,34 +15,39 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	//Controller method to retrieve all the users from the database
 	@RequestMapping("/letsTalk/users")
 	public List<UserDetails> getAllUsers()
 	{
 		return userService.getUsers();
 	}
 	
-	@RequestMapping("/letsTalk/users/{uniqueUserName}")
-	public UserDetails getUser(@PathVariable String uniqueUserName)
+	//Controller method to retrieve a user of particular userName
+	@RequestMapping("/letsTalk/users/{username}")
+	public UserDetails getUser(@PathVariable String username)
 	{
-		return userService.getSingleUser(uniqueUserName);
+		return userService.getSingleUser(username);
 	}
 	
+	//Controller method to register a new user
 	@RequestMapping(method = RequestMethod.POST, value = "/letsTalk/register")
 	public void addUser(@RequestBody UserDetails user)
 	{
 		userService.addSingleUser(user);
 	}
 	
-	@RequestMapping(method = RequestMethod.PUT, value = "/letsTalk/register/{uniqueUserName}")
-	public void updateUser(@RequestBody UserDetails user, @PathVariable String uniqueUserName)
+	//Controller method to update the details of a particular user
+	@RequestMapping(method = RequestMethod.PUT, value = "/letsTalk/users/{username}")
+	public void updateUser(@RequestBody UserDetails user, @PathVariable String username)
 	{
-		userService.updateSingleUser(uniqueUserName, user);
+		userService.updateSingleUser(username, user);
 	}
 	
-	@RequestMapping(method = RequestMethod.DELETE, value = "/letsTalk/users/{uniqueUserName}")
-	public void updateUser(@PathVariable String uniqueUserName)
+	//Controller method to delete a particular user from the database
+	@RequestMapping(method = RequestMethod.DELETE, value = "/letsTalk/users/{username}")
+	public void updateUser(@PathVariable String username)
 	{
-		userService.deleteUser(uniqueUserName);
+		userService.deleteUser(username);
 	}
 	
 	

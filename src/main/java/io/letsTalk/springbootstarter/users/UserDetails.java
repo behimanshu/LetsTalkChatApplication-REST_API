@@ -1,35 +1,36 @@
 package io.letsTalk.springbootstarter.users;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 /**
  * @author Himanshu
  *
  */
 @Entity
+@Table(name = "users")
 public class UserDetails {
 
 	@Id
-	private String uniqueUserName;
+	@Column(name = "username")
+	private String username;
 	private String name;
-	
-	@JsonIgnore
+
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 	private int age;
 	private String gender;
 	private String email_address;
 	private String profession;
-	
-	
-	
-	
-	public UserDetails(String uniqueUserName, String name, String password, int age, String gender,
+
+	public UserDetails(String username, String name, String password, int age, String gender,
 			String email_address, String profession) {
 		super();
-		this.uniqueUserName = uniqueUserName;
+		this.username = username;
 		this.name = name;
 		this.password = password;
 		this.age = age;
@@ -44,21 +45,18 @@ public class UserDetails {
 
 	public String getPassword() {
 		return password;
-}
-
+	}
 
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
-	
-	
-	public String getUniqueUserName() {
-		return uniqueUserName;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUniqueUserName(String uniqueUserName) {
-		this.uniqueUserName = uniqueUserName;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getName() {
@@ -72,28 +70,33 @@ public class UserDetails {
 	public int getAge() {
 		return age;
 	}
+
 	public void setAge(int age) {
 		this.age = age;
 	}
+
 	public String getGender() {
 		return gender;
 	}
+
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
+
 	public String getEmail_address() {
 		return email_address;
 	}
+
 	public void setEmail_address(String email_address) {
 		this.email_address = email_address;
 	}
+
 	public String getProfession() {
 		return profession;
 	}
+
 	public void setProfession(String profession) {
 		this.profession = profession;
 	}
-	
-	
-	
+
 }
